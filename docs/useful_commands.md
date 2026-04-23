@@ -10,13 +10,12 @@ source install/setup.bash
 
 ### Launches the Gazebo Sim using the launch file
 ```bash
-source /opt/ros/jazzy/setup.bash           
-export TURTLEBOT3_MODEL=waffle
-ros2 launch launch/gazebo.launch.py         # Launches with default room1 world
-
-# If you want to lanuch with a specific world use world:=room2.world 
+cd csc-491-final
+chmod +x run.sh         # ONLY ONCE to make the script executable
+./run.sh                # To launch the gz sim
+# If you want to lanuch with a specific world enter the world file afterwards 
 # EXAMPLE:
-ros2 launch launch/gazebo.launch.py world:=room2.world
+./run.sh room2.world
 
 ```
 

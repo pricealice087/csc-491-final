@@ -582,6 +582,30 @@
       </link>
     </model>
 
+
+
+  <model name='lebron'>
+      <pose>-8 0 0 1.5708 0 1.5708</pose>   <!-- x, y, z, roll, pitch, yaw -->
+      <static>true</static>
+      <link name='link'>
+        <visual name='visual'>
+          <geometry>
+          <mesh>
+            <uri>model://lebron/lebron.obj</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://lebron/lebron.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
     <!-- ============================================================ -->
     <!-- PHYSICS & ENVIRONMENT SETTINGS -->
     <!-- ============================================================ -->

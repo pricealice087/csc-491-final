@@ -5,32 +5,31 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
-    # Declare argument for world file
     world_arg = DeclareLaunchArgument(
         'world',
-        default_value='delivery_world.world',
+        default_value='room1.world',
         description='World file name (must be in worlds/ folder)'
     )
     
-    # Get TurtleBot3 launch directory
     turtlebot3_launch_dir = os.path.join(
         get_package_share_directory('turtlebot3_gazebo'), 'launch'
     )
     
-    # Get ros_gz_sim package directory
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
     
-    # Get path to world file
-    project_root = Path(__file__).parent.parent
-    worlds_dir = str(project_root / 'worlds')
+    # Get ABSOLUTE path to project root at runtime
+    project_root = str(Path(__file__).parent.parent.resolve())
+    worlds_dir = os.path.join(project_root, 'worlds')
+    
+    # Get world filename from launch argument
     world_file = LaunchConfiguration('world')
     
-    # Build full path using PathJoinSubstitution
+    # Build absolute path using PathJoinSubstitution
     world_path = PathJoinSubstitution([worlds_dir, world_file])
     
-    # Gazebo server
     gzserver_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')
@@ -40,21 +39,18 @@ def generate_launch_description():
         }.items()
     )
     
-    # Robot state publisher
     robot_state_publisher_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(turtlebot3_launch_dir, 'robot_state_publisher.launch.py')
         )
     )
     
-    # Spawn TurtleBot3
     spawn_turtlebot_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(turtlebot3_launch_dir, 'spawn_turtlebot3.launch.py')
         )
     )
     
-    # Create launch description
     ld = LaunchDescription()
     ld.add_action(world_arg)
     ld.add_action(gzserver_cmd)
