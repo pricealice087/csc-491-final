@@ -1,13 +1,42 @@
 <?xml version="1.0"?>
-<sdf version='1.6'>
+<sdf version='1.9'>
   <world name='default'>
     
+    <!-- ============================================================ -->
+    <!-- REQUIRED GAZEBO PLUGINS FOR CAMERA SUPPORT -->
+    <!-- ============================================================ -->
+    
+    <!-- Sensors system - REQUIRED for camera to work -->
+    <plugin
+      filename="gz-sim-sensors-system"
+      name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <!-- Physics plugin -->
+    <plugin
+      filename="gz-sim-physics-system"
+      name="gz::sim::systems::Physics">
+    </plugin>
+
+    <!-- User commands plugin - allows spawning models -->
+    <plugin
+      filename="gz-sim-user-commands-system"
+      name="gz::sim::systems::UserCommands">
+    </plugin>
+
+    <!-- Scene broadcaster - publishes scene info -->
+    <plugin
+      filename="gz-sim-scene-broadcaster-system"
+      name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+
     <!-- ============================================================ -->
     <!-- LIGHTING - Directional sun for realistic shadows -->
     <!-- ============================================================ -->
     <light name='sun' type='directional'>
       <cast_shadows>1</cast_shadows>
-      <pose frame=''>0 0 10 0 -0 0</pose>
+      <pose  >0 0 10 0 -0 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
       <attenuation>
@@ -71,17 +100,17 @@
       
       <!-- WEST WALL (Left side, 5m long) -->
       <link name='Wall_0'>
-        <pose frame=''>-14.925 0 0 0 -0 -1.5708</pose>
+        <pose  >-14.925 0 0 0 -0 -1.5708</pose>
         <collision name='Wall_0_Collision'>
           <geometry>
             <box>
               <size>5 0.15 0.5</size> <!-- length, thickness, height -->
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose> <!-- Raised to sit on ground -->
+          <pose >0 0 0.25 0 -0 0</pose> <!-- Raised to sit on ground -->
         </collision>
         <visual name='Wall_0_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>5 0.15 0.5</size>
@@ -99,17 +128,17 @@
 
       <!-- SOUTH WALL (Bottom, 30m long) -->
       <link name='Wall_1'>
-        <pose frame=''>0 -2.425 0 0 -0 0</pose>
+        <pose >0 -2.425 0 0 -0 0</pose>
         <collision name='Wall_1_Collision'>
           <geometry>
             <box>
               <size>30 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_1_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>30 0.15 0.5</size>
@@ -127,17 +156,17 @@
 
       <!-- EAST WALL (Right side, 5m long) -->
       <link name='Wall_2'>
-        <pose frame=''>14.925 0 0 0 -0 1.5708</pose>
+        <pose >14.925 0 0 0 -0 1.5708</pose>
         <collision name='Wall_2_Collision'>
           <geometry>
             <box>
               <size>5 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_2_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>5 0.15 0.5</size>
@@ -155,17 +184,17 @@
 
       <!-- NORTH WALL (Top, 30m long) -->
       <link name='Wall_3'>
-        <pose frame=''>0 2.425 0 0 -0 3.14159</pose>
+        <pose >0 2.425 0 0 -0 3.14159</pose>
         <collision name='Wall_3_Collision'>
           <geometry>
             <box>
               <size>30 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_3_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>30 0.15 0.5</size>
@@ -186,17 +215,17 @@
       
       <!-- Left doorway - Upper vertical wall segment -->
       <link name='Wall_10'>
-        <pose frame=''>-5.055 1.375 0 0 -0 -1.5708</pose>
+        <pose >-5.055 1.375 0 0 -0 -1.5708</pose>
         <collision name='Wall_10_Collision'>
           <geometry>
             <box>
               <size>2.25 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_10_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>2.25 0.15 0.5</size>
@@ -214,17 +243,17 @@
 
       <!-- Left doorway - Top horizontal lintel (above door opening) -->
       <link name='Wall_11'>
-        <pose frame=''>-4.88 0.325 0 0 -0 0</pose>
+        <pose >-4.88 0.325 0 0 -0 0</pose>
         <collision name='Wall_11_Collision'>
           <geometry>
             <box>
               <size>0.5 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_11_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>0.5 0.15 0.5</size>
@@ -242,17 +271,17 @@
 
       <!-- Left doorway - Lower vertical wall segment -->
       <link name='Wall_12'>
-        <pose frame=''>-4.705 1.375 0 0 -0 1.5708</pose>
+        <pose >-4.705 1.375 0 0 -0 1.5708</pose>
         <collision name='Wall_12_Collision'>
           <geometry>
             <box>
               <size>2.25 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_12_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>2.25 0.15 0.5</size>
@@ -270,17 +299,17 @@
 
       <!-- Left doorway - Bottom horizontal lintel (below door opening) -->
       <link name='Wall_16'>
-        <pose frame=''>-4.88 -0.525 0 0 -0 0</pose>
+        <pose >-4.88 -0.525 0 0 -0 0</pose>
         <collision name='Wall_16_Collision'>
           <geometry>
             <box>
               <size>0.5 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_16_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>0.5 0.15 0.5</size>
@@ -298,17 +327,17 @@
 
       <!-- Left doorway - South wall extension to outer wall -->
       <link name='Wall_17'>
-        <pose frame=''>-4.705 -1.45 0 0 -0 -1.5708</pose>
+        <pose >-4.705 -1.45 0 0 -0 -1.5708</pose>
         <collision name='Wall_17_Collision'>
           <geometry>
             <box>
               <size>2 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_17_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>2 0.15 0.5</size>
@@ -326,17 +355,17 @@
 
       <!-- Left doorway - North wall extension to outer wall -->
       <link name='Wall_19'>
-        <pose frame=''>-5.055 -1.45 0 0 -0 -1.5708</pose>
+        <pose >-5.055 -1.45 0 0 -0 -1.5708</pose>
         <collision name='Wall_19_Collision'>
           <geometry>
             <box>
               <size>2 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_19_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>2 0.15 0.5</size>
@@ -357,17 +386,17 @@
       
       <!-- Right doorway - South wall segment -->
       <link name='Wall_38'>
-        <pose frame=''>5.185 -1.44 0 0 -0 -1.5708</pose>
+        <pose >5.185 -1.44 0 0 -0 -1.5708</pose>
         <collision name='Wall_38_Collision'>
           <geometry>
             <box>
               <size>2 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_38_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>2 0.15 0.5</size>
@@ -385,17 +414,17 @@
 
       <!-- Right doorway - Bottom horizontal lintel -->
       <link name='Wall_43'>
-        <pose frame=''>5.36 -0.515 0 0 -0 0</pose>
+        <pose >5.36 -0.515 0 0 -0 0</pose>
         <collision name='Wall_43_Collision'>
           <geometry>
             <box>
               <size>0.5 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_43_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>0.5 0.15 0.5</size>
@@ -413,17 +442,17 @@
 
       <!-- Right doorway - South continuation to outer wall -->
       <link name='Wall_44'>
-        <pose frame=''>5.535 -1.44 0 0 -0 -1.5708</pose>
+        <pose >5.535 -1.44 0 0 -0 -1.5708</pose>
         <collision name='Wall_44_Collision'>
           <geometry>
             <box>
               <size>2 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_44_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>2 0.15 0.5</size>
@@ -441,17 +470,17 @@
 
       <!-- Right doorway - North lower vertical segment -->
       <link name='Wall_47'>
-        <pose frame=''>5.175 1.365 0 0 -0 1.5708</pose>
+        <pose >5.175 1.365 0 0 -0 1.5708</pose>
         <collision name='Wall_47_Collision'>
           <geometry>
             <box>
               <size>2.25 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_47_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>2.25 0.15 0.5</size>
@@ -469,17 +498,17 @@
 
       <!-- Right doorway - Top horizontal lintel (above door opening) -->
       <link name='Wall_49'>
-        <pose frame=''>5.35 0.315 0 0 -0 0</pose>
+        <pose >5.35 0.315 0 0 -0 0</pose>
         <collision name='Wall_49_Collision'>
           <geometry>
             <box>
               <size>0.5 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_49_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>0.5 0.15 0.5</size>
@@ -497,17 +526,17 @@
 
       <!-- Right doorway - North upper vertical segment -->
       <link name='Wall_51'>
-        <pose frame=''>5.525 1.365 0 0 -0 1.5708</pose>
+        <pose >5.525 1.365 0 0 -0 1.5708</pose>
         <collision name='Wall_51_Collision'>
           <geometry>
             <box>
               <size>2.25 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
         </collision>
         <visual name='Wall_51_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose >0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
               <size>2.25 0.15 0.5</size>
@@ -525,74 +554,45 @@
 
     </model> <!-- End of exp_empty_rooms -->
 
+
     <!-- ============================================================ -->
-    <!-- BASKETBALL - TARGET OBJECT FOR DELIVERY ROBOT -->
-    <!-- Position: Center of the world at origin -->
-    <!-- This is what the robot needs to find and deliver! -->
+    <!-- BASKETBALL MODEL - Visual landmark -->
     <!-- ============================================================ -->
     <model name='basketball'>
-      <pose frame=''>-10 0 0 0 0 0</pose> <!-- x, y, z position (z=radius so ball sits on ground) -->
-      <link name='link'>
-        <!-- Physical properties of basketball -->
-        <inertial>
-          <mass>0.624</mass> <!-- NBA regulation basketball: 624 grams -->
-          <inertia>
-            <ixx>0.001</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.001</iyy>
-            <iyz>0</iyz>
-            <izz>0.001</izz>
-          </inertia>
-        </inertial>
-        
-        <!-- Collision geometry -->
-        <collision name='collision'>
-          <geometry>
-            <sphere>
-              <radius>0.12</radius> <!-- Basketball radius: 12cm (standard size) -->
-            </sphere>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0.8</restitution_coefficient> <!-- Makes it bouncy! -->
-            </bounce>
-            <friction>
-              <ode>
-                <mu>1.0</mu>   <!-- Surface friction -->
-                <mu2>1.0</mu2>
-              </ode>
-            </friction>
-          </surface>
-        </collision>
-        
-        <!-- Visual appearance -->
-        <visual name='visual'>
-          <geometry>
-            <sphere>
-              <radius>0.12</radius>
-            </sphere>
-          </geometry>
-          <material>
-            <ambient>1 0.5 0 1</ambient>  <!-- Orange color (R=1, G=0.5, B=0, A=1) -->
-            <diffuse>1 0.5 0 1</diffuse>  <!-- Diffuse reflection -->
-            <specular>0.1 0.1 0.1 1</specular> <!-- Slight shininess -->
-          </material>
-        </visual>
-      </link>
-    </model>
-
-
-
-  <model name='lebron'>
-      <pose>-8 0 0 1.5708 0 1.5708</pose>   <!-- x, y, z, roll, pitch, yaw -->
+      <pose>-4 0 .12 0 0 0</pose>  <!-- Changed z from 5 to 0.5 so it's not floating -->
       <static>true</static>
       <link name='link'>
         <visual name='visual'>
           <geometry>
-          <mesh>
-            <uri>model://lebron/lebron.obj</uri>
-              <scale>1 1 1</scale>
+            <mesh>
+              <uri>model://basketball/Basketball_size6_SF.obj</uri>  <!-- Correct filename! -->
+              <scale>.025 .025 .025</scale>  <!-- Scale down - downloaded models are often huge -->
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <sphere>
+              <radius>0.12</radius>  <!-- Use sphere for collision - much faster than mesh -->
+            </sphere>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+
+    <!-- ============================================================ -->
+    <!-- LEBRON MODEL - Visual landmark -->
+    <!-- ============================================================ -->
+    <model name='lebron'>
+      <pose>4 0 0 1.5708 0 -1.5708</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://lebron/lebron.obj</uri>
+              <scale>.5 .5 .5</scale>
             </mesh>
           </geometry>
         </visual>
@@ -620,17 +620,17 @@
     <atmosphere type='adiabatic'/>
     
     <!-- Physics engine settings -->
-    <physics name='default_physics' default='0' type='ode'>
-      <max_step_size>0.001</max_step_size>        <!-- 1ms time steps -->
-      <real_time_factor>1</real_time_factor>      <!-- Run at real-time speed -->
-      <real_time_update_rate>1000</real_time_update_rate> <!-- 1000 Hz update rate -->
+    <physics name='default_physics' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
     </physics>
     
     <!-- Scene lighting and appearance -->
     <scene>
-      <ambient>0.4 0.4 0.4 1</ambient>     <!-- Ambient light level -->
-      <background>0.7 0.7 0.7 1</background> <!-- Gray background -->
-      <shadows>1</shadows>                 <!-- Enable shadows -->
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
     </scene>
 
   </world>

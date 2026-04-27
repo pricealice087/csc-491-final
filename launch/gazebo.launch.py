@@ -5,7 +5,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from launch_ros.substitutions import FindPackageShare
+from launch_ros.actions import Node  
 
 def generate_launch_description():
     world_arg = DeclareLaunchArgument(
@@ -50,6 +50,7 @@ def generate_launch_description():
             os.path.join(turtlebot3_launch_dir, 'spawn_turtlebot3.launch.py')
         )
     )
+    
     
     ld = LaunchDescription()
     ld.add_action(world_arg)
