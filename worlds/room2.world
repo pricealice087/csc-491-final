@@ -1,0 +1,283 @@
+<?xml version="1.0"?>
+<sdf version='1.9'>
+  <world name='default'>
+    
+    <!-- ============================================================ -->
+    <!-- REQUIRED GAZEBO PLUGINS FOR CAMERA SUPPORT -->
+    <!-- ============================================================ -->
+    
+    <!-- Sensors system - REQUIRED for camera to work -->
+    <plugin
+      filename="gz-sim-sensors-system"
+      name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <!-- Physics plugin -->
+    <plugin
+      filename="gz-sim-physics-system"
+      name="gz::sim::systems::Physics">
+    </plugin>
+
+    <!-- User commands plugin - allows spawning models -->
+    <plugin
+      filename="gz-sim-user-commands-system"
+      name="gz::sim::systems::UserCommands">
+    </plugin>
+
+    <!-- Scene broadcaster - publishes scene info -->
+    <plugin
+      filename="gz-sim-scene-broadcaster-system"
+      name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+
+    <!-- ============================================================ -->
+    <!-- LIGHTING - Directional sun for realistic shadows -->
+    <!-- ============================================================ -->
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- ============================================================ -->
+    <!-- GROUND PLANE - Flat surface for the robot to drive on -->
+    <!-- ============================================================ -->
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ============================================================ -->
+    <!-- SIMPLE ROOM STRUCTURE -->
+    <!-- Single rectangular room: 10m x 8m -->
+    <!-- ============================================================ -->
+    <model name='simple_room'>
+      <static>1</static>
+      
+      <!-- WEST WALL (Left side) -->
+      <link name='west_wall'>
+        <pose>-5 0 0 0 0 0</pose>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.15 8 0.5</size> <!-- thickness, length, height -->
+            </box>
+          </geometry>
+          <pose>0 0 0.25 0 0 0</pose>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.15 8 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <!-- EAST WALL (Right side) -->
+      <link name='east_wall'>
+        <pose>5 0 0 0 0 0</pose>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.15 8 0.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.25 0 0 0</pose>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.15 8 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <!-- NORTH WALL (Top) -->
+      <link name='north_wall'>
+        <pose>0 4 0 0 0 0</pose>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>10 0.15 0.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.25 0 0 0</pose>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>10 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <!-- SOUTH WALL (Bottom) -->
+      <link name='south_wall'>
+        <pose>0 -4 0 0 0 0</pose>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>10 0.15 0.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.25 0 0 0</pose>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>10 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+    </model> <!-- End of simple_room -->
+
+    <!-- ============================================================ -->
+    <!-- BASKETBALL - Target object -->
+    <!-- ============================================================ -->
+    <model name='basketball'>
+      <pose>-3 0 0.12 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://basketball/Basketball_size6_SF.obj</uri>
+              <scale>0.025 0.025 0.025</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <sphere>
+              <radius>0.12</radius>
+            </sphere>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- ============================================================ -->
+    <!-- LEBRON MODEL - Visual landmark -->
+    <!-- ============================================================ -->
+    <model name='lebron'>
+      <pose>3 0 0 1.5708 0 -1.5708</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://lebron/lebron.obj</uri>
+              <scale>0.5 0.5 0.5</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://lebron/lebron.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- ============================================================ -->
+    <!-- PHYSICS & ENVIRONMENT SETTINGS -->
+    <!-- ============================================================ -->
+    
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    
+    <physics name='default_physics' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+
+  </world>
+</sdf>

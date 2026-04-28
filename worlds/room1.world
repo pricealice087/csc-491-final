@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<sdf version='1.9'>
+  <world name='default'>
+    
+    <!-- REQUIRED GAZEBO PLUGINS -->
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"></plugin>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"></plugin>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"></plugin>
+
+    <!-- LIGHTING -->
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- GROUND PLANE -->
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- SMALL ROOM: 6m x 5m -->
+    <model name='small_room'>
+      <static>1</static>
+      
+      <!-- WEST WALL -->
+      <link name='west_wall'>
+        <pose>-3 0 0 0 0 0</pose>
+        <collision name='collision'>
+          <geometry>
+            <box><size>0.15 5 0.5</size></box>
+          </geometry>
+          <pose>0 0 0.25 0 0 0</pose>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
+          <geometry>
+            <box><size>0.15 5 0.5</size></box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <!-- EAST WALL -->
+      <link name='east_wall'>
+        <pose>3 0 0 0 0 0</pose>
+        <collision name='collision'>
+          <geometry>
+            <box><size>0.15 5 0.5</size></box>
+          </geometry>
+          <pose>0 0 0.25 0 0 0</pose>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
+          <geometry>
+            <box><size>0.15 5 0.5</size></box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <!-- NORTH WALL -->
+      <link name='north_wall'>
+        <pose>0 2.5 0 0 0 0</pose>
+        <collision name='collision'>
+          <geometry>
+            <box><size>6 0.15 0.5</size></box>
+          </geometry>
+          <pose>0 0 0.25 0 0 0</pose>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
+          <geometry>
+            <box><size>6 0.15 0.5</size></box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+
+      <!-- SOUTH WALL -->
+      <link name='south_wall'>
+        <pose>0 -2.5 0 0 0 0</pose>
+        <collision name='collision'>
+          <geometry>
+            <box><size>6 0.15 0.5</size></box>
+          </geometry>
+          <pose>0 0 0.25 0 0 0</pose>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
+          <geometry>
+            <box><size>6 0.15 0.5</size></box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- BASKETBALL -->
+    <model name='basketball'>
+      <pose>-2 0 0.12 0 0 0</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://basketball/Basketball_size6_SF.obj</uri>
+              <scale>0.025 0.025 0.025</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <sphere><radius>0.12</radius></sphere>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- LEBRON -->
+    <model name='lebron'>
+      <pose>2 0 0 1.5708 0 -1.5708</pose>
+      <static>true</static>
+      <link name='link'>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://lebron/lebron.obj</uri>
+              <scale>0.5 0.5 0.5</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh><uri>model://lebron/lebron.obj</uri></mesh>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- PHYSICS -->
+    <gravity>0 0 -9.8</gravity>
+    <physics name='default_physics' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+
+  </world>
+</sdf>
