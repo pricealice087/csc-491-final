@@ -1,2 +1,0 @@
-ultralytics==8.4.46
-numpy<2
