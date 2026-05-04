@@ -1,13 +1,42 @@
 <?xml version="1.0"?>
-<sdf version='1.6'>
+<sdf version='1.9'>
   <world name='default'>
     
     <!-- ============================================================ -->
-    <!-- LIGHTING -->
+    <!-- REQUIRED GAZEBO PLUGINS FOR CAMERA SUPPORT -->
+    <!-- ============================================================ -->
+    
+    <!-- Sensors system - REQUIRED for camera to work -->
+    <plugin
+      filename="gz-sim-sensors-system"
+      name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <!-- Physics plugin -->
+    <plugin
+      filename="gz-sim-physics-system"
+      name="gz::sim::systems::Physics">
+    </plugin>
+
+    <!-- User commands plugin - allows spawning models -->
+    <plugin
+      filename="gz-sim-user-commands-system"
+      name="gz::sim::systems::UserCommands">
+    </plugin>
+
+    <!-- Scene broadcaster - publishes scene info -->
+    <plugin
+      filename="gz-sim-scene-broadcaster-system"
+      name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+
+    <!-- ============================================================ -->
+    <!-- LIGHTING - Directional sun for realistic shadows -->
     <!-- ============================================================ -->
     <light name='sun' type='directional'>
       <cast_shadows>1</cast_shadows>
-      <pose frame=''>0 0 10 0 -0 0</pose>
+      <pose>0 0 10 0 0 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
       <attenuation>
@@ -20,7 +49,7 @@
     </light>
 
     <!-- ============================================================ -->
-    <!-- GROUND PLANE -->
+    <!-- GROUND PLANE - Flat surface for the robot to drive on -->
     <!-- ============================================================ -->
     <model name='ground_plane'>
       <static>1</static>
@@ -60,28 +89,28 @@
     </model>
 
     <!-- ============================================================ -->
-    <!-- ROOM STRUCTURE (Outer walls + doorways) -->
-    <!-- This is a multi-room layout with doorways -->
+    <!-- SIMPLE ROOM STRUCTURE -->
+    <!-- Single rectangular room: 10m x 8m -->
     <!-- ============================================================ -->
-    <model name='exp_empty_rooms'>
+    <model name='simple_room'>
       <static>1</static>
       
-      <!-- OUTER WALL - West (left side) -->
-      <link name='Wall_0'>
-        <pose frame=''>-14.925 0 0 0 -0 -1.5708</pose>
-        <collision name='Wall_0_Collision'>
+      <!-- WEST WALL (Left side) -->
+      <link name='west_wall'>
+        <pose>-5 0 0 0 0 0</pose>
+        <collision name='collision'>
           <geometry>
             <box>
-              <size>5 0.15 0.5</size> <!-- 5m long, 0.15m thick, 0.5m tall -->
+              <size>0.15 8 0.5</size> <!-- thickness, length, height -->
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose>0 0 0.25 0 0 0</pose>
         </collision>
-        <visual name='Wall_0_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
           <geometry>
             <box>
-              <size>5 0.15 0.5</size>
+              <size>0.15 8 0.5</size>
             </box>
           </geometry>
           <material>
@@ -89,26 +118,27 @@
               <uri>file://media/materials/scripts/gazebo.material</uri>
               <name>Gazebo/Grey</name>
             </script>
+            <ambient>1 1 1 1</ambient>
           </material>
         </visual>
       </link>
 
-      <!-- OUTER WALL - South (bottom) -->
-      <link name='Wall_1'>
-        <pose frame=''>0 -2.425 0 0 -0 0</pose>
-        <collision name='Wall_1_Collision'>
+      <!-- EAST WALL (Right side) -->
+      <link name='east_wall'>
+        <pose>5 0 0 0 0 0</pose>
+        <collision name='collision'>
           <geometry>
             <box>
-              <size>30 0.15 0.5</size> <!-- 30m long wall -->
+              <size>0.15 8 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose>0 0 0.25 0 0 0</pose>
         </collision>
-        <visual name='Wall_1_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
           <geometry>
             <box>
-              <size>30 0.15 0.5</size>
+              <size>0.15 8 0.5</size>
             </box>
           </geometry>
           <material>
@@ -116,26 +146,27 @@
               <uri>file://media/materials/scripts/gazebo.material</uri>
               <name>Gazebo/Grey</name>
             </script>
+            <ambient>1 1 1 1</ambient>
           </material>
         </visual>
       </link>
 
-      <!-- OUTER WALL - East (right side) -->
-      <link name='Wall_2'>
-        <pose frame=''>14.925 0 0 0 -0 1.5708</pose>
-        <collision name='Wall_2_Collision'>
+      <!-- NORTH WALL (Top) -->
+      <link name='north_wall'>
+        <pose>0 4 0 0 0 0</pose>
+        <collision name='collision'>
           <geometry>
             <box>
-              <size>5 0.15 0.5</size>
+              <size>10 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose>0 0 0.25 0 0 0</pose>
         </collision>
-        <visual name='Wall_2_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
           <geometry>
             <box>
-              <size>5 0.15 0.5</size>
+              <size>10 0.15 0.5</size>
             </box>
           </geometry>
           <material>
@@ -143,26 +174,27 @@
               <uri>file://media/materials/scripts/gazebo.material</uri>
               <name>Gazebo/Grey</name>
             </script>
+            <ambient>1 1 1 1</ambient>
           </material>
         </visual>
       </link>
 
-      <!-- OUTER WALL - North (top) -->
-      <link name='Wall_3'>
-        <pose frame=''>0 2.425 0 0 -0 3.14159</pose>
-        <collision name='Wall_3_Collision'>
+      <!-- SOUTH WALL (Bottom) -->
+      <link name='south_wall'>
+        <pose>0 -4 0 0 0 0</pose>
+        <collision name='collision'>
           <geometry>
             <box>
-              <size>30 0.15 0.5</size>
+              <size>10 0.15 0.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+          <pose>0 0 0.25 0 0 0</pose>
         </collision>
-        <visual name='Wall_3_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
+        <visual name='visual'>
+          <pose>0 0 0.25 0 0 0</pose>
           <geometry>
             <box>
-              <size>30 0.15 0.5</size>
+              <size>10 0.15 0.5</size>
             </box>
           </geometry>
           <material>
@@ -170,627 +202,72 @@
               <uri>file://media/materials/scripts/gazebo.material</uri>
               <name>Gazebo/Grey</name>
             </script>
+            <ambient>1 1 1 1</ambient>
           </material>
         </visual>
       </link>
 
-      <!-- ========================================== -->
-      <!-- INTERIOR WALLS - Left Room Doorway -->
-      <!-- ========================================== -->
-      
-      <!-- Left doorway - Top part -->
-      <link name='Wall_10'>
-        <pose frame=''>-5.055 1.375 0 0 -0 -1.5708</pose>
-        <collision name='Wall_10_Collision'>
-          <geometry>
-            <box>
-              <size>2.25 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_10_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>2.25 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- Left doorway - Top lintel (above door) -->
-      <link name='Wall_11'>
-        <pose frame=''>-4.88 0.325 0 0 -0 0</pose>
-        <collision name='Wall_11_Collision'>
-          <geometry>
-            <box>
-              <size>0.5 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_11_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>0.5 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- Left doorway - Bottom part -->
-      <link name='Wall_12'>
-        <pose frame=''>-4.705 1.375 0 0 -0 1.5708</pose>
-        <collision name='Wall_12_Collision'>
-          <geometry>
-            <box>
-              <size>2.25 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_12_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>2.25 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- Left doorway - Bottom lintel -->
-      <link name='Wall_16'>
-        <pose frame=''>-4.88 -0.525 0 0 -0 0</pose>
-        <collision name='Wall_16_Collision'>
-          <geometry>
-            <box>
-              <size>0.5 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_16_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>0.5 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- Left doorway - South wall segment -->
-      <link name='Wall_17'>
-        <pose frame=''>-4.705 -1.45 0 0 -0 -1.5708</pose>
-        <collision name='Wall_17_Collision'>
-          <geometry>
-            <box>
-              <size>2 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_17_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>2 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- Left doorway - North wall segment -->
-      <link name='Wall_19'>
-        <pose frame=''>-5.055 -1.45 0 0 -0 -1.5708</pose>
-        <collision name='Wall_19_Collision'>
-          <geometry>
-            <box>
-              <size>2 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_19_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>2 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- ========================================== -->
-      <!-- INTERIOR WALLS - Right Room Doorway -->
-      <!-- ========================================== -->
-      
-      <!-- Right doorway - South wall -->
-      <link name='Wall_38'>
-        <pose frame=''>5.185 -1.44 0 0 -0 -1.5708</pose>
-        <collision name='Wall_38_Collision'>
-          <geometry>
-            <box>
-              <size>2 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_38_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>2 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- Right doorway - Bottom lintel -->
-      <link name='Wall_43'>
-        <pose frame=''>5.36 -0.515 0 0 -0 0</pose>
-        <collision name='Wall_43_Collision'>
-          <geometry>
-            <box>
-              <size>0.5 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_43_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>0.5 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- Right doorway - South continuation -->
-      <link name='Wall_44'>
-        <pose frame=''>5.535 -1.44 0 0 -0 -1.5708</pose>
-        <collision name='Wall_44_Collision'>
-          <geometry>
-            <box>
-              <size>2 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_44_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>2 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- Right doorway - North bottom segment -->
-      <link name='Wall_47'>
-        <pose frame=''>5.175 1.365 0 0 -0 1.5708</pose>
-        <collision name='Wall_47_Collision'>
-          <geometry>
-            <box>
-              <size>2.25 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_47_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>2.25 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- Right doorway - Top lintel -->
-      <link name='Wall_49'>
-        <pose frame=''>5.35 0.315 0 0 -0 0</pose>
-        <collision name='Wall_49_Collision'>
-          <geometry>
-            <box>
-              <size>0.5 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_49_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>0.5 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-      <!-- Right doorway - North top segment -->
-      <link name='Wall_51'>
-        <pose frame=''>5.525 1.365 0 0 -0 1.5708</pose>
-        <collision name='Wall_51_Collision'>
-          <geometry>
-            <box>
-              <size>2.25 0.15 0.5</size>
-            </box>
-          </geometry>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-        </collision>
-        <visual name='Wall_51_Visual'>
-          <pose frame=''>0 0 0.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>2.25 0.15 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-
-    </model> <!-- End of exp_empty_rooms -->
+    </model> <!-- End of simple_room -->
 
     <!-- ============================================================ -->
-    <!-- OBSTACLES - Box obstacles scattered throughout -->
+    <!-- BASKETBALL - Target object -->
     <!-- ============================================================ -->
-    
-    <!-- Obstacle 1: Left room, north area -->
-    <model name='unit_box_clone'>
-      <pose frame=''>-3.15305 -0.028544 0.243066 0 -0 0</pose>
+    <model name='basketball'>
+      <pose>-3 0 0.12 0 0 0</pose>
+      <static>true</static>
       <link name='link'>
-        <inertial>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.832545 0.712184 0.486131</size>
-            </box>
-          </geometry>
-        </collision>
         <visual name='visual'>
           <geometry>
-            <box>
-              <size>0.832545 0.712184 0.486131</size>
-            </box>
+            <mesh>
+              <uri>model://basketball/Basketball_size6_SF.obj</uri>
+              <scale>0.025 0.025 0.025</scale>
+            </mesh>
           </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Grey</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
         </visual>
-      </link>
-    </model>
-
-    <!-- Obstacle 2: Left room, south area -->
-    <model name='unit_box_clone_clone'>
-      <pose frame=''>-0.800903 -1.10327 0.243066 0 -0 0</pose>
-      <link name='link'>
-        <inertial>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
         <collision name='collision'>
           <geometry>
-            <box>
-              <size>0.832545 0.712184 0.486131</size>
-            </box>
+            <sphere>
+              <radius>0.12</radius>
+            </sphere>
           </geometry>
         </collision>
-        <visual name='visual'>
-          <geometry>
-            <box>
-              <size>0.832545 0.712184 0.486131</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Grey</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
       </link>
     </model>
-
-    <!-- Obstacle 3: Center room, north -->
-    <model name='unit_box_clone_clone_2_clone'>
-      <pose frame=''>7.57023 1.58634 0.243066 0 -0 0</pose>
-      <link name='link'>
-        <inertial>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.832545 0.41249 0.486131</size>
-            </box>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <box>
-              <size>0.832545 0.41249 0.486131</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Grey</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-      </link>
-    </model>
-
-    <!-- Obstacle 4: Center room, south -->
-    <model name='unit_box_clone_clone_2_clone_clone'>
-      <pose frame=''>8.93395 -1.67677 0.243066 0 -0 -3e-06</pose>
-      <link name='link'>
-        <inertial>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.832545 1.22961 0.486131</size>
-            </box>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <box>
-              <size>0.832545 1.22961 0.486131</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Grey</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-      </link>
-    </model>
-
-    <!-- Obstacle 5: Right room, north -->
-    <model name='unit_box_clone_clone_2_clone_clone_clone'>
-      <pose frame=''>10.6858 1.74416 0.243066 0 0 -3e-06</pose>
-      <link name='link'>
-        <inertial>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.832545 1.22961 0.486131</size>
-            </box>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <box>
-              <size>0.832545 1.22961 0.486131</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Grey</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-      </link>
-    </model>
-
-    <!-- Obstacle 6: Right room, south -->
-    <model name='unit_box_clone_clone_2_clone_clone_clone_0'>
-      <pose frame=''>11.9853 -1.72376 0.243066 0 0 -3e-06</pose>
-      <link name='link'>
-        <inertial>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.832545 1.22961 0.486131</size>
-            </box>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <box>
-              <size>0.832545 1.22961 0.486131</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Grey</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-      </link>
-    </model>
-
 
     <!-- ============================================================ -->
-    <!-- CYLINDER OBSTACLE (Center area) -->
+    <!-- LEBRON MODEL - Visual landmark -->
     <!-- ============================================================ -->
-    <model name='unit_cylinder'>
-      <pose frame=''>2.55143 1.08863 0.5 0 -0 0</pose>
+    <model name='lebron'>
+      <pose>3 0 0 1.5708 0 -1.5708</pose>
+      <static>true</static>
       <link name='link'>
-        <inertial>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.145833</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.145833</iyy>
-            <iyz>0</iyz>
-            <izz>0.125</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <cylinder>
-              <radius>0.5</radius> <!-- 0.5m radius -->
-              <length>1.0</length> <!-- 1m tall -->
-            </cylinder>
-          </geometry>
-        </collision>
         <visual name='visual'>
           <geometry>
-            <cylinder>
-              <radius>0.5</radius>
-              <length>1.0</length>
-            </cylinder>
+            <mesh>
+              <uri>model://lebron/lebron.obj</uri>
+              <scale>0.5 0.5 0.5</scale>
+            </mesh>
           </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Grey</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
         </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://lebron/lebron.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
       </link>
     </model>
 
     <!-- ============================================================ -->
     <!-- PHYSICS & ENVIRONMENT SETTINGS -->
     <!-- ============================================================ -->
+    
     <gravity>0 0 -9.8</gravity>
     <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
     <atmosphere type='adiabatic'/>
     
-    <physics name='default_physics' default='0' type='ode'>
+    <physics name='default_physics' type='ode'>
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1</real_time_factor>
       <real_time_update_rate>1000</real_time_update_rate>

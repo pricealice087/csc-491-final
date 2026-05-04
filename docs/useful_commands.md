@@ -23,3 +23,30 @@ chmod +x run.sh         # ONLY ONCE to make the script executable
 ```bash
 ros2 run turtlebot3_teleop teleop_keyboard
 ```
+
+## Viewing Robot Camera Images
+```bash
+# Terminal 1
+./run.sh
+
+# Terminal 2
+ros2 run image_view image_view --ros-args -r image:=/camera/image_raw
+
+```
+
+
+## AMCL Node Launch
+```bash
+# Terminal 1
+./run.sh
+
+# Terminal 2
+ros2 launch nav2_bringup localization_launch.py \
+    map:=$HOME/ai_robotics/csc-491-final/maps/room1_map.yaml
+
+# Don't forget to set inital 2d Pose Estimate at the top of RVIZ
+
+# Terminal 3
+rviz2 -d $(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/nav2_default_view.rviz
+
+```
