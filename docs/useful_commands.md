@@ -24,6 +24,16 @@ chmod +x run.sh         # ONLY ONCE to make the script executable
 ros2 run turtlebot3_teleop teleop_keyboard
 ```
 
+## Viewing Robot Camera Images
+```bash
+# Terminal 1
+./run.sh
+
+# Terminal 2
+ros2 run image_view image_view --ros-args -r image:=/camera/image_raw
+
+```
+
 
 ## AMCL Node Launch
 ```bash
