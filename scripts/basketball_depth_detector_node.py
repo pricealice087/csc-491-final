@@ -23,7 +23,7 @@ class BasketballDepthDetector(Node):
         self.latest_rgb = None
         self.latest_depth = None
 
-        # CHANGE THESE idk if these are the right topic names 
+        # Topic names of the RGB and depth images published by the Gazebo bridge 
         self.rgb_topic = "/camera/image_raw"
         self.depth_topic = "/camera/depth_image"
 
@@ -65,7 +65,6 @@ class BasketballDepthDetector(Node):
         if depth_msg.encoding == "16UC1":
             patch = patch / 1000.0
 
-        # meters
         valid = patch[np.isfinite(patch)]
         valid = valid[valid > 0.0]
 
@@ -127,11 +126,16 @@ class BasketballDepthDetector(Node):
 
         heading_deg = math.degrees(heading_rad)
 
+        # Scale bbox center from RGB resolution to depth resolution
+        depth_h, depth_w = depth_image.shape[:2]
+        depth_cx = int(box_center_x * depth_w / image_width)
+        depth_cy = int(box_center_y * depth_h / image_height)
+
         distance_m = self.get_depth_at_box_center(
             depth_image,
             self.latest_depth,
-            box_center_x,
-            box_center_y
+            depth_cx,
+            depth_cy
         )
 
         direction = "CENTER"
