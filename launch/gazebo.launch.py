@@ -7,6 +7,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node  
 
+
 def generate_launch_description():
     world_arg = DeclareLaunchArgument(
         'world',
@@ -50,12 +51,25 @@ def generate_launch_description():
             os.path.join(turtlebot3_launch_dir, 'spawn_turtlebot3.launch.py')
         )
     )
-    
-    
+    depth_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        arguments=[
+            "/camera/depth_image@sensor_msgs/msg/Image@gz.msgs.Image"
+        ],
+        output="screen"
+    )
+    models_dir = os.path.join(project_root, 'models')
+
+    if 'GZ_SIM_RESOURCE_PATH' in os.environ:
+        os.environ['GZ_SIM_RESOURCE_PATH'] += os.pathsep + models_dir
+    else:
+        os.environ['GZ_SIM_RESOURCE_PATH'] = models_dir
+
     ld = LaunchDescription()
     ld.add_action(world_arg)
     ld.add_action(gzserver_cmd)
     ld.add_action(robot_state_publisher_cmd)
     ld.add_action(spawn_turtlebot_cmd)
-    
+    ld.add_action(depth_bridge)
     return ld

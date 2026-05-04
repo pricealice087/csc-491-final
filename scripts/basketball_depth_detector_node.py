@@ -23,9 +23,9 @@ class BasketballDepthDetector(Node):
         self.latest_rgb = None
         self.latest_depth = None
 
-        # CHANGE THESE idk what the topics are called
+        # CHANGE THESE idk if these are the right topic names 
         self.rgb_topic = "/camera/image_raw"
-        self.depth_topic = "/camera/depth/image_raw"
+        self.depth_topic = "/camera/depth_image"
 
         self.rgb_sub = Subscriber(self, Image, self.rgb_topic)
         self.depth_sub = Subscriber(self, Image, self.depth_topic)
