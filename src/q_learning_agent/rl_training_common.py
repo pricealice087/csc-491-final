@@ -19,8 +19,8 @@ from sensor_msgs.msg import LaserScan
 from ros_gz_interfaces.msg import Entity
 from ros_gz_interfaces.srv import SetEntityPose
 
-from .rl_core import WallFollowerCore
-from .wall_geometry import WallGeometry
+from .navigation_core import NavigationRLCore
+# from .wall_geometry import WallGeometry
 
 
 StartPose = Tuple[float, float, float]

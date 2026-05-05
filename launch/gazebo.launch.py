@@ -82,6 +82,12 @@ def generate_launch_description():
         output='screen',
     )
 
+    slam_node = Node(
+        package='slam_toolbox',
+        executable='async_slam_toolbox_node',
+        output='screen'
+    )
+
     ld = LaunchDescription()
     ld.add_action(world_arg)
     ld.add_action(gzserver_cmd)
@@ -90,4 +96,5 @@ def generate_launch_description():
     ld.add_action(ros_gz_bridge)
     ld.add_action(rgb_image_bridge)
     ld.add_action(depth_image_bridge)
+    ld.add_action(slam_node)
     return ld
