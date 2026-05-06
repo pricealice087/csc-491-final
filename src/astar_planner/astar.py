@@ -6,7 +6,7 @@ Point = Tuple[int, int]
 
 
 def heuristic(a: Point, b: Point) -> float:
-    # Manhattan distance (good for grid maps)
+    # manhattan distance 
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 
