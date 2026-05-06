@@ -7,9 +7,6 @@ class GoalGenerator:
     def __init__(self):
         self.last_goal = None
 
-    # ----------------------------
-    # 1. FRONTIER EXPLORATION GOALS
-    # ----------------------------
     def sample_frontier_goal(self, map_msg):
         """
         Pick a simple frontier-like goal:
@@ -41,14 +38,7 @@ class GoalGenerator:
 
         return goal
 
-    # ----------------------------
-    # 2. RL ACTION → GOAL
-    # ----------------------------
     def convert_rl_action_to_goal(self, action, current_pose):
-        """
-        Convert discrete RL action into a Nav2-compatible goal.
-        Assumes action is angular direction change.
-        """
 
         step_size = 1.0
 
@@ -76,9 +66,6 @@ class GoalGenerator:
 
         return goal
 
-    # ----------------------------
-    # UTIL
-    # ----------------------------
     def get_yaw(self, pose):
         q = pose.orientation
         return math.atan2(

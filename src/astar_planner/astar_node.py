@@ -45,10 +45,6 @@ class AStarNode(Node):
         self.map = None
         self.robot_pose = None
 
-    # ----------------------------
-    # CALLBACKS
-    # ----------------------------
-
     def map_callback(self, msg):
         self.map = msg
 
@@ -84,9 +80,6 @@ class AStarNode(Node):
             self.get_logger().warn("No path found")
             return
 
-    # ----------------------------
-    # MAP CONVERSION
-    # ----------------------------
 
     def convert_map(self, map_msg):
         width = map_msg.info.width
@@ -103,7 +96,7 @@ class AStarNode(Node):
             for x in range(width):
                 val = data[y][x]
 
-                # 0 = free, 100 = obstacle
+                # 0 = free | 100 = obstacle
                 if val >= 50:
                     row.append(1)
                 else:
@@ -113,9 +106,6 @@ class AStarNode(Node):
 
         return grid, origin, resolution
 
-    # ----------------------------
-    # WORLD ↔ GRID TRANSFORM
-    # ----------------------------
 
     def world_to_grid(self, x, y, origin, res):
         gx = int((x - origin.position.x) / res)
@@ -126,10 +116,6 @@ class AStarNode(Node):
         wx = x * res + origin.position.x
         wy = y * res + origin.position.y
         return wx, wy
-
-    # ----------------------------
-    # PATH PUBLISHING
-    # ----------------------------
 
     def publish_path(self, path, origin, res):
         msg = Path()
