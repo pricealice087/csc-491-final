@@ -20,10 +20,13 @@ def generate_launch_description():
     )
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
     tb3_gazebo_pkg = get_package_share_directory('turtlebot3_gazebo')
+    tb3_nav2_pkg = get_package_share_directory('turtlebot3_navigation2')
 
     project_root = str(Path(__file__).parent.parent.resolve())
     worlds_dir = os.path.join(project_root, 'worlds')
     models_dir = os.path.join(project_root, 'models')
+    map_file = os.path.join(project_root, 'maps', 'room1_map.yaml')
+    nav2_params_file = os.path.join(tb3_nav2_pkg, 'param', 'waffle.yaml')
 
     if 'GZ_SIM_RESOURCE_PATH' in os.environ:
         os.environ['GZ_SIM_RESOURCE_PATH'] += os.pathsep + models_dir
@@ -51,7 +54,7 @@ def generate_launch_description():
         arguments=[
             '-name', 'waffle',
             '-file', os.path.join(models_dir, 'turtlebot3_depth', 'model.sdf'),
-            '-x', '0.0',
+            '-x', '1.0',
             '-y', '0.0',
             '-z', '0.01',
         ],
@@ -82,10 +85,39 @@ def generate_launch_description():
         output='screen',
     )
 
-    slam_node = Node(
-        package='slam_toolbox',
-        executable='async_slam_toolbox_node',
-        output='screen'
+    map_server = Node(
+        package='nav2_map_server',
+        executable='map_server',
+        name='map_server',
+        output='screen',
+        parameters=[nav2_params_file, {'yaml_filename': map_file, 'use_sim_time': True}]
+    )
+
+    amcl = Node(
+        package='nav2_amcl',
+        executable='amcl',
+        name='amcl',
+        output='screen',
+        parameters=[nav2_params_file, {
+            'use_sim_time': True,
+            'set_initial_pose': True,
+            'initial_pose.x': 1.0,
+            'initial_pose.y': 0.0,
+            'initial_pose.z': 0.0,
+            'initial_pose.yaw': 0.0,
+        }]
+    )
+
+    lifecycle_manager = Node(
+        package='nav2_lifecycle_manager',
+        executable='lifecycle_manager',
+        name='lifecycle_manager_localization',
+        output='screen',
+        parameters=[{
+            'use_sim_time': True,
+            'autostart': True,
+            'node_names': ['map_server', 'amcl']
+        }]
     )
 
     ld = LaunchDescription()
@@ -96,5 +128,7 @@ def generate_launch_description():
     ld.add_action(ros_gz_bridge)
     ld.add_action(rgb_image_bridge)
     ld.add_action(depth_image_bridge)
-    ld.add_action(slam_node)
+    ld.add_action(map_server)
+    ld.add_action(amcl)
+    ld.add_action(lifecycle_manager)
     return ld

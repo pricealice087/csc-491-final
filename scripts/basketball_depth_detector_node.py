@@ -4,6 +4,7 @@ import numpy as np
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
+from geometry_msgs.msg import Point
 from cv_bridge import CvBridge
 
 from message_filters import Subscriber, ApproximateTimeSynchronizer
@@ -23,7 +24,7 @@ class BasketballDepthDetector(Node):
         self.latest_rgb = None
         self.latest_depth = None
 
-        # Topic names of the RGB and depth images published by the Gazebo bridge 
+        # Topic names of the RGB and depth images published by the Gazebo bridge
         self.rgb_topic = "/camera/image_raw"
         self.depth_topic = "/camera/depth_image"
 
@@ -37,6 +38,8 @@ class BasketballDepthDetector(Node):
         )
 
         self.sync.registerCallback(self.image_callback)
+
+        self.detection_pub = self.create_publisher(Point, '/basketball/detection', 10)
 
         # Print detection once per second
         self.timer = self.create_timer(1.0, self.detect_once)
@@ -157,6 +160,13 @@ class BasketballDepthDetector(Node):
             f"bbox=({x1:.1f}, {y1:.1f}, {x2:.1f}, {y2:.1f}) | "
             f"bbox_width={box_width:.1f}px"
         )
+
+        if distance_m is not None:
+            msg = Point()
+            msg.x = distance_m
+            msg.y = heading_deg
+            msg.z = best_confidence
+            self.detection_pub.publish(msg)
 
 
 def main(args=None):

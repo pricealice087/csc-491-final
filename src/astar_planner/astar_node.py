@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 
+import sys
+import os
+sys.path.insert(0, os.path.dirname(__file__))
+
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, DurabilityPolicy, ReliabilityPolicy
 
 import numpy as np
 
@@ -16,8 +21,14 @@ class AStarNode(Node):
     def __init__(self):
         super().__init__('astar_node')
 
+        map_qos = QoSProfile(
+            depth=1,
+            durability=DurabilityPolicy.TRANSIENT_LOCAL,
+            reliability=ReliabilityPolicy.RELIABLE
+        )
+
         self.map_sub = self.create_subscription(
-            OccupancyGrid, '/map', self.map_callback, 10)
+            OccupancyGrid, '/map', self.map_callback, map_qos)
 
         self.goal_sub = self.create_subscription(
             PoseStamped, '/goal_pose', self.goal_callback, 10)
@@ -81,7 +92,7 @@ class AStarNode(Node):
         width = map_msg.info.width
         height = map_msg.info.height
         resolution = map_msg.info.resolution
-        origin = map_msg.info.origin.pose
+        origin = map_msg.info.origin
 
         data = np.array(map_msg.data).reshape((height, width))
         data = np.flipud(data)
@@ -107,13 +118,13 @@ class AStarNode(Node):
     # ----------------------------
 
     def world_to_grid(self, x, y, origin, res):
-        gx = int((x - origin.x) / res)
-        gy = int((y - origin.y) / res)
+        gx = int((x - origin.position.x) / res)
+        gy = int((y - origin.position.y) / res)
         return (gx, gy)
 
     def grid_to_world(self, x, y, origin, res):
-        wx = x * res + origin.x
-        wy = y * res + origin.y
+        wx = x * res + origin.position.x
+        wy = y * res + origin.position.y
         return wx, wy
 
     # ----------------------------
@@ -148,3 +159,7 @@ def main():
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
